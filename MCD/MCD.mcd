@@ -1,0 +1,5 @@
+EMPLOYE : id_employe, nom, prenom, mail, password
+GERER, 0N EMPLOYE, 1N LIGUE
+
+APPARTENIR, 01 EMPLOYE, ON LIGUE
+LIGUE : id_ligue, nom ligue
