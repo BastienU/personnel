@@ -10,6 +10,7 @@ public class CredentialsExample
 	private static String user = "";
 	private static String password = "";
 	
+	
 	static String getUrl() 
 	{
 		return "jdbc:" + driver + "://" + host + ":" + port + "/" + database ;

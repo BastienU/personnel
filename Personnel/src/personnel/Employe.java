@@ -1,6 +1,9 @@
 package personnel;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+
+import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -16,8 +19,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	private String nom, prenom, password, mail;
 	private Ligue ligue;
 	private GestionPersonnel gestionPersonnel;
+	static LocalDate dateDebut;
+	static LocalDate dateFin;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password)
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateDebut, LocalDate dateFin)
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -25,6 +30,8 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
+		this.dateDebut = LocalDate.now();
+		this.dateFin = LocalDate.now();
 	}
 	
 	/**
@@ -142,6 +149,31 @@ public class Employe implements Serializable, Comparable<Employe>
 	public Ligue getLigue()
 	{
 		return ligue;
+	}
+	
+	public LocalDate getDateDebut()
+	{
+		return dateDebut;
+	}
+	
+	public void setdateDebut(LocalDate dateDebut)
+	{
+		this.dateDebut = dateDebut;
+	}
+	
+	public LocalDate getDateFin()
+	{
+		return dateFin;
+	}
+	
+	public void setDateFin(LocalDate dateFin)
+	{
+		if(dateFin.compareTo(dateDebut)<0) {
+			
+			this.dateFin = dateFin;
+		}
+		else
+			System.out.println("La date de fin ne peut être inférieure à la date d'arrivée");
 	}
 
 	/**

@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -110,7 +111,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 
 	public Employe addEmploye(String nom, String prenom, String mail, String password)
 	{
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password);
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, null, null);
 		employes.add(employe);
 		return employe;
 	}
@@ -141,5 +142,11 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	public String toString()
 	{
 		return nom;
+	}
+
+	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateDebut, LocalDate dateFin) {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, null, null);
+		employes.add(employe);
+		return employe;
 	}
 }
