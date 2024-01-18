@@ -109,9 +109,9 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @return l'employé créé. 
 	 */
 
-	public Employe addEmploye(String nom, String prenom, String mail, String password)
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
 	{
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, null, null);
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
 		employes.add(employe);
 		return employe;
 	}
@@ -144,8 +144,8 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		return nom;
 	}
 
-	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateDebut, LocalDate dateFin) {
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, null, null);
+	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
 		employes.add(employe);
 		return employe;
 	}
