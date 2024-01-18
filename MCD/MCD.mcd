@@ -1,5 +1,6 @@
-EMPLOYE : id_employe, nom, prenom, mail, password
-GERER, 0N EMPLOYE, 1N LIGUE
+EMPLOYE: id_employe, nom_employe, prenom_employe, mail_employe, password_employe, dateArrivee, dateDepart
+GERER, 01 EMPLOYE, 01 LIGUE
 
-APPARTENIR, 01 EMPLOYE, ON LIGUE
-LIGUE : id_ligue, nom ligue
+APPARTENIR, 01 EMPLOYE, 0N LIGUE
+LIGUE: id_ligue, nom_ligue
+
