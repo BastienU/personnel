@@ -174,7 +174,7 @@ public class Employe implements Serializable, Comparable<Employe>
 			throw new DateInvalide(new Exception("La date de départ ne peut pas être nulle"));		
 	}
 	
-	public LocalDate getdateDepart() 
+	public LocalDate getdateDepart()
 	{
 		return dateDepart;
 	}
