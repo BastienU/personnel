@@ -1,4 +1,4 @@
-EMPLOYE: id_employe, nom_employe, prenom_employe, mail_employe, password_employe, admin, root
+EMPLOYE: id_employe, nom_employe, prenom_employe, mail_employe, password_employe, admin, root, dateArrivee, dateDepart
 APPARTENIR, 01 EMPLOYE, 0N LIGUE
 
 GERER, 0N EMPLOYE, 1N LIGUE
