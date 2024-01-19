@@ -159,13 +159,19 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide
 	{ 
-		if (dateDepart != null && dateArrivee != null && dateArrivee.isAfter(dateDepart))
-			throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
-		else if(dateArrivee != null)
-			this.dateArrivee = dateArrivee;	
+		if(dateDepart != null)
+		{
+			if(dateArrivee != null) {
+				if (dateArrivee.isAfter(dateDepart))
+					throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
+				else
+					this.dateArrivee = dateArrivee;
+			}
+			else
+				throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));
+		}
 		else
-			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle"));
-		
+			throw new DateInvalide(new Exception("La date de départ ne peut pas être nulle"));		
 	}
 	
 	public LocalDate getdateDepart() 
