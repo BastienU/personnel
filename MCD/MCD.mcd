@@ -1,0 +1,5 @@
+EMPLOYE: id_employe, nom_employe, prenom_employe, mail_employe, password_employe, admin, root
+APPARTENIR, 01 EMPLOYE, 0N LIGUE
+
+GERER, 0N EMPLOYE, 1N LIGUE
+LIGUE: id_ligue, nom_ligue
