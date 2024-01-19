@@ -9,11 +9,13 @@
     <span class='normal'>mail_employe</span>,
     <span class='normal'>password_employe</span>,
     <span class='normal'>admin</span>,
+    <span class='normal'>dateArrivee</span>,
+    <span class='normal'>dateDepart</span>,
     <span class='foreign'>#id_ligue</span>
   )</summary>
   <ul>
     <li>Le champ <i>id_employe</i> constitue la clé primaire de la table. C'était déjà un identifiant de l'entité <i>EMPLOYE</i>.</li>
-    <li>Les champs <i>nom_employe</i>, <i>prenom_employe</i>, <i>mail_employe</i>, <i>password_employe</i> et <i>admin</i> étaient déjà de simples attributs de l'entité <i>EMPLOYE</i>.</li>
+    <li>Les champs <i>nom_employe</i>, <i>prenom_employe</i>, <i>mail_employe</i>, <i>password_employe</i>, <i>admin</i>, <i>dateArrivee</i> et <i>dateDepart</i> étaient déjà de simples attributs de l'entité <i>EMPLOYE</i>.</li>
     <li>Le champ <i>id_ligue</i> est une clé étrangère. Il a migré par l'association de dépendance fonctionnelle <i>APPARTENIR</i> à partir de l'entité <i>LIGUE</i> en perdant son caractère identifiant.</li>
   </ul></details>
 </div>
