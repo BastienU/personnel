@@ -7,7 +7,7 @@ CREATE TABLE EMPLOYE
     prenom_employe VARCHAR(100),
     mail_employe VARCHAR(100) ,
     password_employe VARCHAR(100),
-    admin VARCHAR(100)
+    admin VARCHAR(100),
     date_arrivee DATE,
     date_depart DATE
 );
