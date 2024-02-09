@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
+import org.hamcrest.text.IsEmptyString;
 import org.junit.jupiter.api.Test;
 
 import personnel.DateInvalide;
@@ -31,15 +32,8 @@ class testEmploye {
 		employe = ligue.addEmploye("Boucharde", "Gérarde", "g.bouchard@gmail.come", "azertye", LocalDate.parse("2020-01-13"), LocalDate.parse("2022-01-14")); 
 		assertEquals(LocalDate.parse("2020-01-13"), employe.getdateArrivee());
 		// pareil
-	        
-		/* Ligue liga = gestionPersonnel.addLigue("Liga");	
-		Employe goat = liga.addEmploye("Vini", "jr", "vini.jr@rm.com", "vini", LocalDate.parse("2020-10-1"),null);
-		//test avec AssertThrows sur des dates à null
-	    assertThrows(DateTimeParseException.class, () -> {
-	    goat.setdateArrivee(LocalDate.parse("2020-10-10"));
-	    assertEquals(LocalDate.parse("2020-10-10"), goat.getdateArrivee());
-	    }, "Le test devrait fonctionner.");*/
-	   }
+	    }
+	
     @Test
     void testSetdateArrivee_InvalidDate() throws SauvegardeImpossible {
         Ligue liga = gestionPersonnel.addLigue("Liga");
@@ -144,14 +138,8 @@ class testEmploye {
 		{
 			e.printStackTrace();			
 		}
-//		assertThrows(DateInvalide.class, () -> {
-//			employe.setdateDepart(LocalDate.parse("2024-01-13"));
-//		}, "La date de départ est invalide");
 		
 		// test setteur : cas date depart antérieure à date arrivee
-//		 assertThrows(DateInvalide.class, () -> {
-//				employe.setdateDepart(LocalDate.parse("2017-04-13"));
-//		 }, "La date d'arrivée ne doit pas être sup à celle de départ");
 		
 		 try 
 			{
@@ -195,4 +183,180 @@ class testEmploye {
 		}
 		 
 	}
+	
+	
+		 @Test
+		 //test sur le format du mail
+		 void testSetMail() throws SauvegardeImpossible{
+			 
+			 //test cas où le mail est null
+			 Ligue ligue = gestionPersonnel.addLigue("BernaLigue");
+			 Employe employe = ligue.addEmploye("Bernadette", "Delaroche", "Bernadette.dlroche@gmail.com", "Bernadette1905", LocalDate.parse("2012-09-11"), LocalDate.parse("2023-03-28"));
+			 
+			 try
+			 {
+				 employe.setMail(null);
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+			 
+			 //test cas où le mail est de la forme xxx.xxx@xxx.xx
+			 
+			 try 
+			 {
+				 employe.setMail("Bernadette.dlroche@gmail.com");
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+			 //test cas où le mail est de la forme
+			 
+			 try
+			 {
+				 employe.setMail("B3rn@d3tt3@gm41l.c0m");
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+			 //test cas où le mail est différent de @gmail.com
+			 
+			 try
+			 {
+				 employe.setMail("Bernadette.dlroche@aol.fr");
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+			 //test cas normal
+			 
+			 try
+			 {
+				 employe.setMail("Bernadette.dlroche.@gmail.com");
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+		 }
+		 
+		 @Test
+		 //test sur le prenom
+		 void testSetPrenom() throws SauvegardeImpossible{
+			 
+			 Ligue ligue = gestionPersonnel.addLigue("Ligue Jeanjean");
+			 Employe employe = ligue.addEmploye("Jean-Eude", "Isril", "jean-eude.isril@gmail.com", "19785296", LocalDate.parse("2012-12-12"), LocalDate.parse("2014-10-13"));
+			 
+			 //test prenom null
+			 
+			 try
+			 {
+				 employe.setPrenom(null);
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+		 }
+		 
+		 @Test
+		 //test sur le nom
+		 void testSetNom() throws SauvegardeImpossible{
+			 
+			 Ligue ligue = gestionPersonnel.addLigue("Gisligue");
+			 Employe employe = ligue.addEmploye("Gislène", "Gabros", "gigigabros@gmail.com", "Gagisbros95", LocalDate.parse("1993-06-29"), LocalDate.parse("2000-09-08"));
+			 
+			 //test nom null
+			 
+			 try
+			 {
+				 employe.setNom(null);
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+		 }
+		 
+		 @Test
+		 //test sur le password
+		 void testSetPassword() throws SauvegardeImpossible{
+			 
+			 Ligue ligue = gestionPersonnel.addLigue("Liga");
+			 Employe employe = ligue.addEmploye("Gislène", "Gabros", "gigigabros@gmail.com", "Gagisbros95", LocalDate.parse("1993-06-29"), LocalDate.parse("2000-09-08"));
+			 
+			 //test password null
+			 
+			 try
+			 {
+				 employe.setPassword("");
+			 }
+			 catch (Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+			 
+		 }
+		 
+		 
+		 
+		 @Test
+		 //test suppression d'un employé
+		 void testRemoveEmploye() throws SauvegardeImpossible{
+			 
+			 Ligue ligue = gestionPersonnel.addLigue("Ligue");
+			 Employe employe = ligue.addEmploye("Dupont", "Michel", "dupontlajoie@gmail.com", "", null, null);
+			 ligue.setAdministrateur(employe);
+
+			 
+				 if(employe != null) //test existance de l'employé.
+				 {
+					 if(employe.estRoot()) //vérifie si l'employé est root.
+						 System.out.println("Vous ne pouvez pas supprimer le root !");
+					 else
+					 {						 
+						 if(employe.estAdmin(ligue)) //vérifie si l'employé est admin.
+						 {
+							 employe.remove();
+							 System.out.println("L'administrateur a bien été supprimé");
+						 }
+						 else
+						 {
+							 employe.remove();
+							 System.out.println("L'employé " + employe + " a bien été supprimé de la ligue " + ligue + ".");
+						 }
+					 }
+				 }
+				 else
+					 System.out.println("Il n'existe pas d'employé");
+		 }
+		 
+		 
+		 @Test
+		 //test suppression d'un employé
+		 void testRemoveLigue() throws SauvegardeImpossible{
+			 
+			 Ligue ligue = gestionPersonnel.addLigue("Ligue");
+			 Employe employe = ligue.addEmploye("Dupont", "Michel", "dupontlajoie@gmail.com", "", null, null);
+		 
+			 try
+			 {
+				 ligue.remove();
+			 }
+			 catch(Exception e)
+			 {
+				 e.printStackTrace();
+			 }
+		 }
+
 }

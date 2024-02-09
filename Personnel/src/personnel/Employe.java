@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
+import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -21,6 +22,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private GestionPersonnel gestionPersonnel;
 	private LocalDate dateArrivee;
 	private LocalDate dateDepart;
+	private boolean isAdmin;
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
 	{
@@ -44,9 +46,23 @@ public class Employe implements Serializable, Comparable<Employe>
 	 * est l'admininstrateur.
 	 */
 	
-	public boolean estAdmin(Ligue ligue)
+	/**
+	 *  Getteur si l'employé est un admin ou non d'une ligue
+	 */
+	 public boolean estAdmin(Ligue ligue)
 	{
-		return ligue.getAdministrateur() == this;
+		isAdmin = ligue.getAdministrateur() == this;
+		return isAdmin;
+	}
+	 
+	/* Methode de mise à jour d'un admin d'une ligue*/
+	 public void setAdminLigue(boolean admin)
+	{
+		this.isAdmin=admin;
+	
+		ligue = this.getLigue();
+		if(ligue!=null)
+			ligue.setAdministrateur(this);
 	}
 	
 	/**
@@ -72,11 +88,17 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le nom de l'employé.
 	 * @param nom le nouveau nom.
+	 * @throws Exception 
 	 */
 	
-	public void setNom(String nom)
+	public void setNom(String nom) throws Exception
 	{
-		this.nom = nom;
+		if(nom != null)
+		{
+			this.nom = nom;
+		}
+		else
+			throw new Exception("Le nom ne peut pas être vide");
 	}
 
 	/**
@@ -92,12 +114,20 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le prénom de l'employé.
 	 * @param prenom le nouveau prénom de l'employé. 
+	 * @throws Exception 
 	 */
 
-	public void setPrenom(String prenom)
+	public void setPrenom(String prenom) throws Exception
 	{
-		this.prenom = prenom;
-	}
+		if(prenom != null)
+		{
+			this.prenom = prenom;
+		}
+		else
+			throw new Exception("Le prénom ne peut pas être vide");
+		
+	}	
+	
 
 	/**
 	 * Retourne le mail de l'employé.
@@ -112,11 +142,21 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le mail de l'employé.
 	 * @param mail le nouveau mail de l'employé.
+	 * @throws Exception 
 	 */
 
-	public void setMail(String mail)
+	public void setMail(String mail) throws Exception
 	{
-		this.mail = mail;
+		if(mail != null)
+		{
+			String regx = "^(.+)@(.+)$";
+			if(regx == getMail())
+				this.mail = mail;
+			else
+				throw new Exception ("Le format du mail doit être de la forme xxxx@xxxx.xx");
+		}
+		else
+			throw new Exception("Le mail ne peut pas être vide");
 	}
 
 	/**
@@ -135,11 +175,15 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Change le password de l'employé.
 	 * @param password le nouveau password de l'employé. 
+	 * @throws Exception 
 	 */
 	
-	public void setPassword(String password)
+	public void setPassword(String password) throws Exception
 	{
-		this.password= password;
+		if(password != "")
+			this.password = password;
+		else
+			throw new Exception("Le mot de passe ne peut pas être vide");
 	}
 
 	/**
