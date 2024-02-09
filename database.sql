@@ -10,13 +10,14 @@ CREATE TABLE EMPLOYE
     date_arrivee DATE,
     date_depart DATE,
     id_ligue int,
+    admin BOOLEAN
 );
 
 CREATE TABLE LIGUE
 (
     id_ligue INT PRIMARY KEY NOT NULL,
     nom_ligue varchar(100),
-    id_employe varchar(100)
+    id_employe INT
 );
 
 ALTER TABLE EMPLOYE
