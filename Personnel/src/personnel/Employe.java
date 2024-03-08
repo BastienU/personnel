@@ -2,9 +2,13 @@ package personnel;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
+
+import com.mysql.cj.util.StringUtils;
 
 /**
  * Employé d'une ligue hébergée par la M2L. Certains peuvent 
@@ -22,6 +26,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private GestionPersonnel gestionPersonnel;
 	private LocalDate dateArrivee;
 	private LocalDate dateDepart;
+	private DateTimeFormatter dtf;
 	private boolean isAdmin;
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
@@ -32,9 +37,10 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.password = password;
 		this.mail = mail;
 		this.ligue = ligue;
-		this.dateArrivee = dateArrivee;
-		this.dateDepart = LocalDate.now();
-		this.dateDepart = dateDepart;
+		if(dateArrivee != null)
+			this.dateArrivee = dateArrivee;
+		if(dateDepart != null)
+			this.dateDepart = dateDepart;
 	}
 	
 	/**
@@ -196,36 +202,48 @@ public class Employe implements Serializable, Comparable<Employe>
 		return ligue;
 	}
 	
+	//Format des dates : yyyy-MM-dd
 	public LocalDate getdateArrivee()
 	{
-		return dateArrivee;
+		if(dateArrivee!=null && !StringUtils.isNullOrEmpty(dateArrivee.toString()))
+		{
+			dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
+			String strDA = dateArrivee.format(dtf);
+			return LocalDate.parse(strDA, dtf);			
+		}
+		else
+			return null;
 	}
 	
 	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide
-	{ 
-		if(dateDepart != null)
-		{
-			if(dateArrivee != null) {
-				if (dateArrivee.isAfter(dateDepart))
-					throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
-				else
-					this.dateArrivee = dateArrivee;
-			}
-			else
-				throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));
+	{ 		
+		if(dateArrivee != null) 
+		{				
+			if (dateDepart!=null && dateArrivee.isAfter(dateDepart))
+				throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
+			else					
+				this.dateArrivee = dateArrivee;			
 		}
 		else
-			throw new DateInvalide(new Exception("La date de départ ne peut pas être nulle"));		
+			throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));				
 	}
 	
+	//Format des dates : yyyy-MM-dd
 	public LocalDate getdateDepart()
 	{
-		return dateDepart;
+		if(dateDepart!=null && !StringUtils.isNullOrEmpty(dateDepart.toString()))
+		{
+			dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd"); 
+			String strDD = dateDepart.format(dtf);
+			return LocalDate.parse(strDD, dtf);		
+		}
+		else
+			return null;
 	}
 	
 	public void setdateDepart(LocalDate dateDepart) throws DateInvalide
 	{
-		if(dateDepart!= null)
+		if(dateDepart != null)
 		{
 			if(dateArrivee != null)
 			{
@@ -236,10 +254,10 @@ public class Employe implements Serializable, Comparable<Employe>
 			}
 			else
 				throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));
-			
 		}
 		else
-			throw new DateInvalide(new Exception("La date de départ ne peut pas être nulle"));
+			this.dateDepart = null;
+//			throw new DateInvalide(new Exception("La date de départ ne peut pas être nulle"));
 	}
 
 	/**
@@ -279,4 +297,14 @@ public class Employe implements Serializable, Comparable<Employe>
 			res += ligue.toString();
 		return res + ")";
 	}
+	
+	/*
+	 * Permet d'afficher les informations complètes de l'employé sélectionné	 * 
+	 */
+	public String infoEmploye()
+	{
+		String infoPerso = "Nom : "+nom+"\r\nPrénom : "+prenom+"\r\nMail : "+mail+"\r\nMDP:"+password+"\r\nDate d'arrivée : "+getdateArrivee()+"\r\nDate de départ : "+getdateDepart();
+		return infoPerso;
+	}
+	
 }

@@ -53,6 +53,7 @@ public class PersonnelConsole
 					catch (SauvegardeImpossible e)
 					{
 						System.out.println("Impossible d'effectuer la sauvegarde");
+						e.printStackTrace();
 					}
 				}
 			);

@@ -2,7 +2,10 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+
+import com.mysql.cj.util.StringUtils;
 
 import commandLineMenus.List;
 import commandLineMenus.ListOption;
@@ -98,9 +101,25 @@ public class LigueConsole
 		return new Option("ajouter un employé", "a",
 				() -> 
 				{
-					ligue.addEmploye(getString("nom : "), 
-						getString("prenom : "), getString("mail : "), 
-						getString("password : "), null, null);
+					try {
+						String strDA=getString("date d'arrivée : ");
+						LocalDate dateArrivee=null;
+						
+						if(!StringUtils.isNullOrEmpty(strDA))
+						{
+							dateArrivee=LocalDate.parse(strDA);
+						
+							ligue.addEmploye(getString("nom : "), 
+									getString("prenom : "), 
+									getString("mail : "), 
+									getString("password : "),
+									dateArrivee);							
+						}
+						else
+							System.out.println("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd.");
+						} catch (DateInvalide e) {
+						e.printStackTrace();
+					}
 				}
 		);
 	}

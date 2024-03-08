@@ -88,3 +88,4 @@ public class JDBC implements Passerelle
 		}		
 	}
 }
+//Faire une copie de ce fichier et en dupliquer un renommé correctement

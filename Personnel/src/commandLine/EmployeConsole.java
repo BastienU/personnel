@@ -2,6 +2,10 @@ package commandLine;
 
 import static commandLineMenus.rendering.examples.util.InOut.getString;
 
+import java.time.LocalDate;
+
+import com.mysql.cj.util.StringUtils;
+
 import commandLineMenus.ListOption;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
@@ -11,7 +15,10 @@ public class EmployeConsole
 {
 	private Option afficher(final Employe employe)
 	{
-		return new Option("Afficher l'employé", "l", () -> {System.out.println(employe);});
+//		return new Option("Afficher l'employé", "l", () -> {System.out.println(employe);});
+		
+		// Permet d'afficher les informations complètes de l'employé sélectionné 
+		return new Option("Afficher l'employé", "l", () -> {System.out.println(employe.infoEmploye());});
 	}
 
 	ListOption<Employe> selectEmploye()
@@ -38,6 +45,10 @@ public class EmployeConsole
 			menu.add(changerPrenom(employe));
 			menu.add(changerMail(employe));
 			menu.add(changerPassword(employe));
+//			Personnel 2 Saisie des dates en ligne de commande ajouté le 21/02/2024
+			menu.add(changerDateArrivee(employe));
+			menu.add(changerDateDepart(employe));
+//			Fin ajout Saisie des dates.
 			menu.addBack("q");
 			return menu;
 	}
@@ -55,12 +66,12 @@ public class EmployeConsole
 	Option deleteEmploye(Employe employe)
 	{
 		Menu menu = new Menu("Supprimer l'employe " + employe.getNom(), "d");
-		menu.add(DeleteSelectedEmploye(employe));
+		menu.add(deleteSelectedEmploye(employe));
 		menu.addBack("q");
 		return menu;
 	}
 
-	private Option DeleteSelectedEmploye(final Employe employe)
+	private Option deleteSelectedEmploye(final Employe employe)
 	{
 		return new Option("Confirmer la suppression de " + employe.getNom(), "d", () -> {employe.remove();});
 		
@@ -110,6 +121,49 @@ public class EmployeConsole
 	{
 		return new Option("Changer l'administrateur de la ligue", "y", () -> {try {
 			employe.setAdminLigue(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}});
+	}
+	
+	private Option changerDateArrivee(final Employe employe)
+	{
+		//Permet d'afficher la date d'arrivée enregistrée en BDD
+//		LocalDate dateArrivee = employe.getdateArrivee();
+//		if(dateArrivee != null)
+//			System.out.println("La date d'arrivée : " + dateArrivee.toString());
+		
+		return new Option("Changer la date d'arrivée", "a", () -> {try {
+			String newDate=getString("Nouvelle date d'arrivée : ");
+			if(!StringUtils.isNullOrEmpty(newDate))
+			{
+				LocalDate newDateArrivee = LocalDate.parse(newDate);
+				employe.setdateArrivee(newDateArrivee);				
+			}
+			else
+				System.out.println("La date d'arrivée ne peut être nulle.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}});
+	}
+	
+	private Option changerDateDepart(final Employe employe)
+	{
+		//Permet d'afficher la date de départ enregistrée en BDD
+//		LocalDate dateDepart = employe.getdateDepart();
+//		if(dateDepart != null)
+//			System.out.println("La date de départ : " + dateDepart.toString());
+		
+		return new Option("Changer la date de départ", "d", () -> {try {
+			String newDate=getString("Nouvelle date de départ : ");
+			if(!StringUtils.isNullOrEmpty(newDate))
+			{
+				LocalDate newDateDepart = LocalDate.parse(newDate);
+				employe.setdateDepart(newDateDepart);				
+			}
+			else
+				employe.setdateDepart(null);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}});

@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.mysql.cj.util.StringUtils;
+
 /**
  * Représente une ligue. Chaque ligue est reliée à une liste
  * d'employés dont un administrateur. Comme il n'est pas possible
@@ -102,18 +104,27 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	/**
 	 * Ajoute un employé dans la ligue. Cette méthode 
 	 * est le seul moyen de créer un employé.
+	 * L'ajout d'un employé nécessite une date d'arrivée 
+	 * mais nous ne connaissons pas sa date de départ. 
+	 * Donc on laisse nulle la date de départ.
 	 * @param nom le nom de l'employé.
 	 * @param prenom le prénom de l'employé.
 	 * @param mail l'adresse mail de l'employé.
 	 * @param password le password de l'employé.
+	 * @param dateArrivee la date de création de l'employé.
 	 * @return l'employé créé. 
+	 * @throws DateInvalide 
 	 */
-
-	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee) throws DateInvalide
 	{
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
-		employes.add(employe);
-		return employe;
+		if(!StringUtils.isNullOrEmpty(dateArrivee.toString()))
+		{
+			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
+			employes.add(employe);
+			return employe;		
+		}
+		else
+			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
 	}
 	
 	void remove(Employe employe)
@@ -144,8 +155,8 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		return nom;
 	}
 
-	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) {
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart);
+	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateArrivee) {
+		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
 		employes.add(employe);
 		return employe;
 	}
