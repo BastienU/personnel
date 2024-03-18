@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
 import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
@@ -28,6 +30,9 @@ public class Employe implements Serializable, Comparable<Employe>
 	private LocalDate dateDepart;
 	private DateTimeFormatter dtf;
 	private boolean isAdmin;
+	private int id = 0;
+	private SortedSet<Employe> employes;
+	private Employe administrateur;
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
 	{
@@ -41,6 +46,15 @@ public class Employe implements Serializable, Comparable<Employe>
 			this.dateArrivee = dateArrivee;
 		if(dateDepart != null)
 			this.dateDepart = dateDepart;
+	}
+	
+	Employe(GestionPersonnel gestionPersonnel, int id, String nom)
+	{
+		this.nom = nom;
+		employes = new TreeSet<>();
+		this.gestionPersonnel = gestionPersonnel;
+		administrateur = gestionPersonnel.getRoot();
+		this.id = id;
 	}
 	
 	/**

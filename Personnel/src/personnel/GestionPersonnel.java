@@ -20,6 +20,7 @@ public class GestionPersonnel implements Serializable
 	private static final long serialVersionUID = -105283113987886425L;
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
+	private SortedSet<Employe> employes;
 	private Employe root = new Employe(this, null, "root", "", "", "toor", null, null);
 	public final static int SERIALIZATION = 1, JDBC = 2, 
 			TYPE_PASSERELLE = JDBC;
@@ -82,7 +83,14 @@ public class GestionPersonnel implements Serializable
 
 	public Ligue addLigue(String nom) throws SauvegardeImpossible
 	{
-		Ligue ligue = new Ligue(this, nom); 
+		Ligue ligue = new Ligue(this, nom);
+		ligues.add(ligue);
+		return ligue;
+	}
+	
+	public Ligue addLigue(int id, String nom) throws SauvegardeImpossible
+	{
+		Ligue ligue = new Ligue(this, id, nom);
 		ligues.add(ligue);
 		return ligue;
 	}
@@ -105,11 +113,5 @@ public class GestionPersonnel implements Serializable
 	public Employe getRoot()
 	{
 		return root;
-	}
-
-	public Ligue addTest(String test) throws SauvegardeImpossible {
-		Ligue ligue = new Ligue(this, test);
-		ligues.add(ligue);
-		return ligue;
 	}
 }

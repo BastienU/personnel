@@ -121,7 +121,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		{
 			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
 			employes.add(employe);
-			return employe;		
+			return employe;
 		}
 		else
 			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		

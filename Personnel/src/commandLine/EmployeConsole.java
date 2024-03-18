@@ -134,7 +134,7 @@ public class EmployeConsole
 //			System.out.println("La date d'arrivée : " + dateArrivee.toString());
 		
 		return new Option("Changer la date d'arrivée", "a", () -> {try {
-			String newDate=getString("Nouvelle date d'arrivée : ");
+			String newDate=getString("Nouvelle date d'arrivée (au format YYYY-mm-DD) : ");
 			if(!StringUtils.isNullOrEmpty(newDate))
 			{
 				LocalDate newDateArrivee = LocalDate.parse(newDate);
@@ -155,7 +155,7 @@ public class EmployeConsole
 //			System.out.println("La date de départ : " + dateDepart.toString());
 		
 		return new Option("Changer la date de départ", "d", () -> {try {
-			String newDate=getString("Nouvelle date de départ : ");
+			String newDate=getString("Nouvelle date de départ (au format YYYY-mm-DD) : ");
 			if(!StringUtils.isNullOrEmpty(newDate))
 			{
 				LocalDate newDateDepart = LocalDate.parse(newDate);

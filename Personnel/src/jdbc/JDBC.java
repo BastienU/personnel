@@ -41,7 +41,7 @@ public class JDBC implements Passerelle
 			ResultSet ligues = instruction.executeQuery(requete);
 			while (ligues.next())
 				try {
-					gestionPersonnel.addLigue(ligues.getString(2));
+					gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
 				} catch (SauvegardeImpossible e) {
 					e.printStackTrace();
 				}
@@ -92,4 +92,23 @@ public class JDBC implements Passerelle
 		}		
 	}
 }
+
+//	public int insert(Employe employe) throws SauvegardeImpossible 
+//	{
+//		try 
+//		{
+//			PreparedStatement instruction;
+//			instruction = connection.prepareStatement("insert into employe (nom) values(?)", Statement.RETURN_GENERATED_KEYS);
+//			instruction.setString(1, employe.getNom());		
+//			instruction.executeUpdate();
+//			ResultSet id = instruction.getGeneratedKeys();
+//			id.next();
+//			return id.getInt(1);
+//		} 
+//		catch (SQLException exception) 
+//		{
+//			exception.printStackTrace();
+//			throw new SauvegardeImpossible(exception);
+//		}		
+//	}
 //Faire une copie de ce fichier et en dupliquer un renommé correctement

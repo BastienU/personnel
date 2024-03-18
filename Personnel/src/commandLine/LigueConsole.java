@@ -102,7 +102,7 @@ public class LigueConsole
 				() -> 
 				{
 					try {
-						String strDA=getString("date d'arrivée : ");
+						String strDA=getString("date d'arrivée (au format YYYY-mm-DD) : ");
 						LocalDate dateArrivee=null;
 						
 						if(!StringUtils.isNullOrEmpty(strDA))
