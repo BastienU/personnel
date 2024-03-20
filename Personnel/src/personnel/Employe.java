@@ -84,7 +84,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	}
 	 
 	/* Methode de mise à jour d'un admin d'une ligue*/
-	 public void setAdminLigue(boolean admin)
+	 public void setAdminLigue(boolean admin) throws SauvegardeImpossible
 	{
 		this.isAdmin=admin;
 	
@@ -303,9 +303,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	/**
 	 * Supprime l'employé. Si celui-ci est un administrateur, le root
 	 * récupère les droits d'administration sur sa ligue.
+	 * @throws SauvegardeImpossible 
 	 */
 	
-	public void remove()
+	public void remove() throws SauvegardeImpossible
 	{
 		Employe root = gestionPersonnel.getRoot();
 		if (this != root)

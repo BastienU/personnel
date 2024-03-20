@@ -41,7 +41,7 @@ public class JDBC implements Passerelle
 		}
 		try 
 		{
-			String requete = "select * from ligue";
+			String requete = "SELECT * FROM ligue";
 			Statement instruction = connection.createStatement();
 			ResultSet ligues = instruction.executeQuery(requete);
 			while (ligues.next())
@@ -84,7 +84,7 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;
-			instruction = connection.prepareStatement("insert into ligue (nom) values(?)", Statement.RETURN_GENERATED_KEYS);
+			instruction = connection.prepareStatement("INSERT INTO ligue (nom) VALUES(?)", Statement.RETURN_GENERATED_KEYS);
 			instruction.setString(1, ligue.getNom());		
 			instruction.executeUpdate();
 			ResultSet id = instruction.getGeneratedKeys();
@@ -96,6 +96,30 @@ public class JDBC implements Passerelle
 			exception.printStackTrace();
 			throw new SauvegardeImpossible(exception);
 		}		
+	}
+	
+	public int update(Ligue ligue) throws SauvegardeImpossible
+	{
+		try 
+		{
+			PreparedStatement instruction;		
+			instruction = connection.prepareStatement("UPDATE ligue SET nom = ? WHERE idLigue = ?", Statement.RETURN_GENERATED_KEYS);
+			instruction.setString(1, ligue.getNom());
+			//System.out.println(ligue.getNom());
+			instruction.setInt(2, ligue.getId());
+			//System.out.println(ligue.getId());
+			instruction.executeUpdate();
+			ResultSet id = instruction.getGeneratedKeys();
+			if (id.next())
+				return id.getInt(1);
+			else
+				return -1;
+		} 
+		catch (SQLException exception) 
+		{
+			exception.printStackTrace();
+			throw new SauvegardeImpossible(exception);
+		}
 	}
 	
 	public int insertRoot(Employe root) throws SauvegardeImpossible

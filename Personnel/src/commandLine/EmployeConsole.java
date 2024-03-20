@@ -10,6 +10,7 @@ import commandLineMenus.ListOption;
 import commandLineMenus.Menu;
 import commandLineMenus.Option;
 import personnel.Employe;
+import personnel.SauvegardeImpossible;
 
 public class EmployeConsole 
 {
@@ -73,7 +74,11 @@ public class EmployeConsole
 
 	private Option deleteSelectedEmploye(final Employe employe)
 	{
-		return new Option("Confirmer la suppression de " + employe.getNom(), "d", () -> {employe.remove();});
+		return new Option("Confirmer la suppression de " + employe.getNom(), "d", () -> {try {
+			employe.remove();
+		} catch (SauvegardeImpossible e) {
+			e.printStackTrace();
+		}});
 		
 		
 		// Faire en sorte de revenir sur le menu avant la sélection de l'employé
