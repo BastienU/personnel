@@ -98,7 +98,7 @@ public class JDBC implements Passerelle
 		}		
 	}
 	
-	public int update(Ligue ligue) throws SauvegardeImpossible
+	public void update(Ligue ligue) throws SauvegardeImpossible
 	{
 		try 
 		{
@@ -109,11 +109,7 @@ public class JDBC implements Passerelle
 			instruction.setInt(2, ligue.getId());
 			//System.out.println(ligue.getId());
 			instruction.executeUpdate();
-			ResultSet id = instruction.getGeneratedKeys();
-			if (id.next())
-				return id.getInt(1);
-			else
-				return -1;
+			
 		} 
 		catch (SQLException exception) 
 		{
@@ -126,27 +122,58 @@ public class JDBC implements Passerelle
 	{
 		try 
 	    {
-			PreparedStatement checkIfExists = connection.prepareStatement("SELECT COUNT(*) FROM employe WHERE nom = ?");
+			PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM employe WHERE nom = ?");
 	        checkIfExists.setString(1, root.getNom());
 	        ResultSet result = checkIfExists.executeQuery();
 	        result.next();
-	        int rowCount = result.getInt(1);
-	        if (rowCount > 0)
-	          System.out.println("Un utilisateur root existe déjà !");
+	        int id = result.getInt(1);
+	        if (id > 0)
+	          System.out.println("L'identifiant du compte root est : " + id);
+	        else
+	        {	
+	        	
+	        	
+	        	PreparedStatement instruction;
+	        	instruction = connection.prepareStatement("INSERT INTO employe (nom, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+	        	instruction.setString(1, root.getNom());
+	        	instruction.setString(2, root.getPassword());
+	        	instruction.executeUpdate();
+	        	result = instruction.getGeneratedKeys();
+	        	result.next();
+	        	id = result.getInt(1);	        
+	        }
 	        
-	        PreparedStatement instruction;
-	        instruction = connection.prepareStatement("INSERT INTO employe (nom, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-	        instruction.setString(1, root.getNom());
-	        instruction.setString(2, root.getPassword());
-	        instruction.executeUpdate();
-	        ResultSet id = instruction.getGeneratedKeys();
-	        id.next();
-	        return id.getInt(1);
+	        return id;
 	    }
 		catch (SQLException exception)
 		{
 			exception.printStackTrace();
 	        throw new SauvegardeImpossible(exception);
+		}
+	}
+	
+	public void updateEmploye(Employe employe)
+	{
+		try 
+		{
+			PreparedStatement instruction;		
+			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password = ? WHERE idEmploye = ?", Statement.RETURN_GENERATED_KEYS);
+			instruction.setString(1, employe.getNom());
+			System.out.println(employe.getNom());
+			instruction.setString(2, employe.getPrenom());
+			System.out.println(employe.getPrenom());
+			instruction.setString(3, employe.getMail());
+			System.out.println(employe.getMail());
+			instruction.setString(4, employe.getPassword());
+			System.out.println(employe.getPassword());
+			instruction.setInt(5, employe.getId());
+			System.out.println(employe.getId());
+			instruction.executeUpdate();
+			
+		} 
+		catch (SQLException exception) 
+		{
+			exception.printStackTrace();			
 		}
 	}
 

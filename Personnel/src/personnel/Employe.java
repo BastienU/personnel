@@ -49,13 +49,20 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.id = id;
 	}
 	
-	Employe(GestionPersonnel gestionPersonnel, int id, String nom)
+//	Employe(GestionPersonnel gestionPersonnel, int id, String nom)
+//	{
+//		this.nom = nom;
+//		setEmployes(new TreeSet<>());
+//		this.gestionPersonnel = gestionPersonnel;
+//		Employe administrateur = gestionPersonnel.getRoot();
+//		
+//		this.id = id;
+//	}
+	
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
 	{
-		this.nom = nom;
-		setEmployes(new TreeSet<>());
-		this.gestionPersonnel = gestionPersonnel;
-		Employe administrateur = gestionPersonnel.getRoot();
-		this.id = id;
+		this(gestionPersonnel, ligue, nom, prenom, mail, password, dateArrivee, dateDepart, -1);
+		this.id = gestionPersonnel.insertRoot(this);
 	}
 
 	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
@@ -124,6 +131,7 @@ public class Employe implements Serializable, Comparable<Employe>
 		if(nom != null)
 		{
 			this.nom = nom;
+			gestionPersonnel.updateEmploye(this);
 		}
 		else
 			throw new Exception("Le nom ne peut pas être vide");
@@ -150,6 +158,7 @@ public class Employe implements Serializable, Comparable<Employe>
 		if(prenom != null)
 		{
 			this.prenom = prenom;
+			gestionPersonnel.updateEmploye(this);
 		}
 		else
 			throw new Exception("Le prénom ne peut pas être vide");
@@ -179,7 +188,10 @@ public class Employe implements Serializable, Comparable<Employe>
 		{
 			String regx = "^(.+)@(.+)$";
 			if(regx == getMail())
+			{
 				this.mail = mail;
+				gestionPersonnel.updateEmploye(this);
+			}
 			else
 				throw new Exception ("Le format du mail doit être de la forme xxxx@xxxx.xx");
 		}
@@ -209,7 +221,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	public void setPassword(String password) throws Exception
 	{
 		if(password != "")
+		{
 			this.password = password;
+			gestionPersonnel.updateEmploye(this);
+		}
 		else
 			throw new Exception("Le mot de passe ne peut pas être vide");
 	}
@@ -255,14 +270,17 @@ public class Employe implements Serializable, Comparable<Employe>
 			return null;
 	}
 	
-	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide
+	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide, SauvegardeImpossible
 	{ 		
 		if(dateArrivee != null) 
 		{				
 			if (dateDepart!=null && dateArrivee.isAfter(dateDepart))
 				throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
-			else					
+			else
+			{
 				this.dateArrivee = dateArrivee;			
+				gestionPersonnel.updateEmploye(this);				
+			}
 		}
 		else
 			throw new DateInvalide(new Exception ("La date d'arrivée ne peut pas être nulle."));
@@ -281,7 +299,7 @@ public class Employe implements Serializable, Comparable<Employe>
 			return null;
 	}
 	
-	public void setdateDepart(LocalDate dateDepart) throws DateInvalide
+	public void setdateDepart(LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
 	{
 		if(dateDepart != null)
 		{
@@ -290,7 +308,10 @@ public class Employe implements Serializable, Comparable<Employe>
 				if (dateDepart.isBefore(dateArrivee)) 
 					throw new DateInvalide(new Exception("La date de départ ne peut pas être antérieure à celle d'arrivée"));
 				else
+				{
 					this.dateDepart = dateDepart;
+					gestionPersonnel.updateEmploye(this);				
+				}
 			}
 			else
 				throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));
