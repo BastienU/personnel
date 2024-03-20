@@ -74,6 +74,11 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	{
 		return administrateur;
 	}
+	
+	public int getId()
+	{
+		return id;
+	}
 
 	/**
 	 * Fait de administrateur l'administrateur de la ligue.
@@ -115,11 +120,11 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @return l'employé créé. 
 	 * @throws DateInvalide 
 	 */
-	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee) throws DateInvalide
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee) throws DateInvalide, SauvegardeImpossible
 	{
 		if(!StringUtils.isNullOrEmpty(dateArrivee.toString()))
 		{
-			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
+			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null, id);
 			employes.add(employe);
 			return employe;
 		}
@@ -154,10 +159,10 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	{
 		return nom;
 	}
-
-	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateArrivee) {
-		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
-		employes.add(employe);
-		return employe;
-	}
+//
+//	public Employe addTest(String nom, String prenom, String mail, String password, LocalDate dateArrivee) {
+//		Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null, id);
+//		employes.add(employe);
+//		return employe;
+//	}
 }

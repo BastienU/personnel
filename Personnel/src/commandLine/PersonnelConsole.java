@@ -72,11 +72,10 @@ public class PersonnelConsole
 		return ok;
 	}
 	
-	public static void main(String[] args)
+	public static void main(String[] args)throws SauvegardeImpossible
 	{
-		PersonnelConsole personnelConsole = 
-		new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
+		PersonnelConsole personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
 		if (personnelConsole.verifiePassword())
-			personnelConsole.start();
+			personnelConsole.start();		
 	}
 }

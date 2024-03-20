@@ -119,7 +119,9 @@ public class LigueConsole
 							System.out.println("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd.");
 						} catch (DateInvalide e) {
 						e.printStackTrace();
-					}
+					} catch (SauvegardeImpossible e) {
+							e.printStackTrace();
+						}
 				}
 		);
 	}

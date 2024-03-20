@@ -1,6 +1,7 @@
 package personnel;
 
 import java.io.Serializable;
+import java.time.Clock;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
@@ -30,11 +31,9 @@ public class Employe implements Serializable, Comparable<Employe>
 	private LocalDate dateDepart;
 	private DateTimeFormatter dtf;
 	private boolean isAdmin;
-	private int id = 0;
-	private SortedSet<Employe> employes;
-	private Employe administrateur;
+	private int id;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart)
+	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, int id)
 	{
 		this.gestionPersonnel = gestionPersonnel;
 		this.nom = nom;
@@ -46,14 +45,19 @@ public class Employe implements Serializable, Comparable<Employe>
 			this.dateArrivee = dateArrivee;
 		if(dateDepart != null)
 			this.dateDepart = dateDepart;
+		this.id = id;
 	}
 	
-	Employe(GestionPersonnel gestionPersonnel, int id, String nom)
+//	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
+//	{
+//		this(gestionPersonnel, ligue, nom, prenom, mail, password, dateArrivee, dateDepart, -1);
+//		this.id = gestionPersonnel.insertRoot(this);
+//	}
+
+	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
 	{
-		this.nom = nom;
-		employes = new TreeSet<>();
+		this.setNom(nom);
 		this.gestionPersonnel = gestionPersonnel;
-		administrateur = gestionPersonnel.getRoot();
 		this.id = id;
 	}
 	
@@ -205,6 +209,11 @@ public class Employe implements Serializable, Comparable<Employe>
 		else
 			throw new Exception("Le mot de passe ne peut pas être vide");
 	}
+	
+	public String getPassword()
+	{
+		return password;
+	}
 
 	/**
 	 * Retourne la ligue à laquelle l'employé est affecté.
@@ -214,6 +223,11 @@ public class Employe implements Serializable, Comparable<Employe>
 	public Ligue getLigue()
 	{
 		return ligue;
+	}
+	
+	public int getId()
+	{
+		return id;
 	}
 	
 	//Format des dates : yyyy-MM-dd
@@ -239,7 +253,7 @@ public class Employe implements Serializable, Comparable<Employe>
 				this.dateArrivee = dateArrivee;			
 		}
 		else
-			throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));				
+			throw new DateInvalide(new Exception ("La date d'arrivée ne peut pas être nulle."));
 	}
 	
 	//Format des dates : yyyy-MM-dd

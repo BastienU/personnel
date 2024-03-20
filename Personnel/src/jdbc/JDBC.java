@@ -31,9 +31,14 @@ public class JDBC implements Passerelle
 	}
 	
 	@Override
-	public GestionPersonnel getGestionPersonnel() 
+	public GestionPersonnel getGestionPersonnel()
 	{
-		GestionPersonnel gestionPersonnel = new GestionPersonnel();
+		GestionPersonnel gestionPersonnel = null;
+		try {
+			gestionPersonnel = new GestionPersonnel();
+		} catch (SauvegardeImpossible e) {
+			e.printStackTrace();
+		}
 		try 
 		{
 			String requete = "select * from ligue";
@@ -51,7 +56,8 @@ public class JDBC implements Passerelle
 			System.out.println(e);
 		}
 		return gestionPersonnel;
-	}
+	}	
+	
 
 	@Override
 	public void sauvegarderGestionPersonnel(GestionPersonnel gestionPersonnel) throws SauvegardeImpossible 
@@ -91,24 +97,57 @@ public class JDBC implements Passerelle
 			throw new SauvegardeImpossible(exception);
 		}		
 	}
-}
+	
+	public int insertRoot(Employe root) throws SauvegardeImpossible
+	{
+		try 
+	    {
+	        PreparedStatement instruction;
+	        instruction = connection.prepareStatement("INSERT INTO employe (nom, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+	        instruction.setString(1, root.getNom());
+	        instruction.setString(2, root.getPassword());
+	        instruction.executeUpdate();
+	        ResultSet id = instruction.getGeneratedKeys();
+	        id.next();
+	        return id.getInt(1);
+	    }
+		catch (SQLException exception)
+		{
+			exception.printStackTrace();
+	        throw new SauvegardeImpossible(exception);
+		}
+	}
 
-//	public int insert(Employe employe) throws SauvegardeImpossible 
-//	{
-//		try 
-//		{
-//			PreparedStatement instruction;
-//			instruction = connection.prepareStatement("insert into employe (nom) values(?)", Statement.RETURN_GENERATED_KEYS);
-//			instruction.setString(1, employe.getNom());		
-//			instruction.executeUpdate();
-//			ResultSet id = instruction.getGeneratedKeys();
-//			id.next();
-//			return id.getInt(1);
-//		} 
-//		catch (SQLException exception) 
-//		{
-//			exception.printStackTrace();
-//			throw new SauvegardeImpossible(exception);
-//		}		
-//	}
-//Faire une copie de ce fichier et en dupliquer un renommé correctement
+	public int insertEmploye(Employe employe) throws SauvegardeImpossible 
+	{
+	    try 
+	    {
+	        PreparedStatement instruction;
+	        if (employe.getLigue() != null) 
+	        {
+	            instruction = connection.prepareStatement("INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart, estAdmin, idLigue) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+	            instruction.setInt(8, employe.getLigue().getId());
+	        } 
+	        else 
+	            instruction = connection.prepareStatement("INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart, estAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+	        	        
+	        instruction.setString(1, employe.getNom());
+	        instruction.setString(2, employe.getPrenom());
+	        instruction.setString(3, employe.getMail());
+	        instruction.setString(4, employe.getPassword());
+	        instruction.setDate(5, java.sql.Date.valueOf(employe.getdateArrivee()));
+	        instruction.setDate(6, java.sql.Date.valueOf(employe.getdateDepart()));
+	        instruction.setBoolean(7,  employe.estAdmin(null));
+
+	        instruction.executeUpdate();
+	        ResultSet id = instruction.getGeneratedKeys();
+	        id.next();
+	        return id.getInt(1);
+	    } 
+	    catch (SQLException exception) 
+	    {
+	        exception.printStackTrace();
+	        throw new SauvegardeImpossible(exception);
+	    }
+	}
+}
