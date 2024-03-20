@@ -26,6 +26,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	private static final long serialVersionUID = 4795721718037994734L;
 	private String nom, prenom, password, mail;
 	private Ligue ligue;
+	private SortedSet<Employe> employes;
 	private GestionPersonnel gestionPersonnel;
 	private LocalDate dateArrivee;
 	private LocalDate dateDepart;
@@ -48,11 +49,14 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.id = id;
 	}
 	
-//	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
-//	{
-//		this(gestionPersonnel, ligue, nom, prenom, mail, password, dateArrivee, dateDepart, -1);
-//		this.id = gestionPersonnel.insertRoot(this);
-//	}
+	Employe(GestionPersonnel gestionPersonnel, int id, String nom)
+	{
+		this.nom = nom;
+		setEmployes(new TreeSet<>());
+		this.gestionPersonnel = gestionPersonnel;
+		Employe administrateur = gestionPersonnel.getRoot();
+		this.id = id;
+	}
 
 	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
 	{
@@ -223,6 +227,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	public Ligue getLigue()
 	{
 		return ligue;
+	}
+	
+	public SortedSet<Employe> getEmployes() {
+		return employes;
+	}
+
+	public void setEmployes(SortedSet<Employe> employes) {
+		this.employes = employes;
 	}
 	
 	public int getId()

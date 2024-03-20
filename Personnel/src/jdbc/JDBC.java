@@ -102,6 +102,14 @@ public class JDBC implements Passerelle
 	{
 		try 
 	    {
+			PreparedStatement checkIfExists = connection.prepareStatement("SELECT COUNT(*) FROM employe WHERE nom = ?");
+	        checkIfExists.setString(1, root.getNom());
+	        ResultSet result = checkIfExists.executeQuery();
+	        result.next();
+	        int rowCount = result.getInt(1);
+	        if (rowCount > 0)
+	          System.out.println("Un utilisateur root existe déjà !");
+	        
 	        PreparedStatement instruction;
 	        instruction = connection.prepareStatement("INSERT INTO employe (nom, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 	        instruction.setString(1, root.getNom());
