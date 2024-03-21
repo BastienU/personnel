@@ -130,7 +130,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	{
 		if(!StringUtils.isNullOrEmpty(dateArrivee.toString()))
 		{
-			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null, id);
+			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
 			employes.add(employe);
 			return employe;
 		}

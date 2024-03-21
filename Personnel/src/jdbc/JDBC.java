@@ -185,7 +185,7 @@ public class JDBC implements Passerelle
 	{
 		try 
 		{
-			PreparedStatement instruction;		
+			PreparedStatement instruction;	
 			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password = ? WHERE idEmploye = ?");
 			instruction.setString(1, employe.getNom());
 			System.out.println(employe.getNom());
@@ -211,31 +211,36 @@ public class JDBC implements Passerelle
 	    try 
 	    {
 	        PreparedStatement instruction;
-	        if (employe.getLigue() != null) 
-	        {
-	            instruction = connection.prepareStatement("INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart, estAdmin, idLigue) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-	            instruction.setInt(8, employe.getLigue().getId());
-	        } 
-	        else 
-	            instruction = connection.prepareStatement("INSERT INTO employe (nom, prenom, mail, password, dateArrivee, dateDepart, estAdmin) VALUES (?, ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-	        	        
+	        
+	        instruction = connection.prepareStatement("INSERT INTO employe (nom, prenom, mail, password, dateArrivee, idLigue) VALUES ( ?, ?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
+	        
 	        instruction.setString(1, employe.getNom());
+	        System.out.println(employe.getNom());
 	        instruction.setString(2, employe.getPrenom());
+	        System.out.println(employe.getPrenom());
 	        instruction.setString(3, employe.getMail());
+	        System.out.println(employe.getMail());
 	        instruction.setString(4, employe.getPassword());
-	        instruction.setDate(5, java.sql.Date.valueOf(employe.getdateArrivee()));
-	        instruction.setDate(6, java.sql.Date.valueOf(employe.getdateDepart()));
-	        instruction.setBoolean(7,  employe.estAdmin(null));
-
-	        instruction.executeUpdate();
-	        ResultSet id = instruction.getGeneratedKeys();
-	        id.next();
-	        return id.getInt(1);
-	    } 
-	    catch (SQLException exception) 
-	    {
-	        exception.printStackTrace();
-	        throw new SauvegardeImpossible(exception);
-	    }
+	        System.out.println(employe.getPassword());
+	        if (employe.getdateArrivee() != null)
+	        {
+	        	instruction.setDate(5, java.sql.Date.valueOf(employe.getdateArrivee()));
+	        	System.out.println(employe.getdateArrivee());
+	        }       
+	        System.out.println(employe.getLigue().getId());
+	        instruction.setInt(6, employe.getLigue().getId());
+	        
+		   	instruction.executeUpdate();		   	
+		   	
+		   	ResultSet id = instruction.getGeneratedKeys();
+		   	
+			id.next();
+			return id.getInt(1);        
+		}
+		catch (SQLException exception)
+		{
+			exception.printStackTrace();
+		    throw new SauvegardeImpossible(exception);
+		}
 	}
 }

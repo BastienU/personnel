@@ -59,8 +59,12 @@ public class Employe implements Serializable, Comparable<Employe>
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
 	{
 		this(gestionPersonnel, ligue, nom, prenom, mail, password, dateArrivee, dateDepart, -1);
-		this.id = gestionPersonnel.insertRoot(this);
+		if(ligue == null && dateArrivee == null)
+			this.id = gestionPersonnel.insertRoot(this);
+		else
+			this.id = gestionPersonnel.insertEmploye(this);
 	}
+
 
 //	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
 //	{
