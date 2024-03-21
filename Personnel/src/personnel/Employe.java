@@ -34,14 +34,20 @@ public class Employe implements Serializable, Comparable<Employe>
 	private boolean isAdmin;
 	private int id;
 	
-	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, int id)
+	public Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, int id)
 	{
 		this.gestionPersonnel = gestionPersonnel;
-		this.nom = nom;
-		this.prenom = prenom;
-		this.password = password;
-		this.mail = mail;
-		this.ligue = ligue;
+		if(ligue != null)
+			this.ligue = ligue;
+		if(nom != null)
+			this.nom = nom;
+		if(prenom != null)
+			this.prenom = prenom;
+		if(mail != null)
+			this.mail = mail;
+		if(password != null)
+			this.password = password;		
+		
 		if(dateArrivee != null)
 			this.dateArrivee = dateArrivee;
 		if(dateDepart != null)
@@ -49,15 +55,6 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.id = id;
 	}
 	
-//	Employe(GestionPersonnel gestionPersonnel, int id, String nom)
-//	{
-//		this.nom = nom;
-//		setEmployes(new TreeSet<>());
-//		this.gestionPersonnel = gestionPersonnel;
-//		Employe administrateur = gestionPersonnel.getRoot();
-//		
-//		this.id = id;
-//	}
 	
 	Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws SauvegardeImpossible
 	{
@@ -65,12 +62,12 @@ public class Employe implements Serializable, Comparable<Employe>
 		this.id = gestionPersonnel.insertRoot(this);
 	}
 
-	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
-	{
-		this.setNom(nom);
-		this.gestionPersonnel = gestionPersonnel;
-		this.id = id;
-	}
+//	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
+//	{
+//		this.setNom(nom);
+//		this.gestionPersonnel = gestionPersonnel;
+//		this.id = id;
+//	}
 	
 	/**
 	 * Retourne vrai ssi l'employé est administrateur de la ligue 
@@ -186,7 +183,7 @@ public class Employe implements Serializable, Comparable<Employe>
 	{
 		if(mail != null)
 		{
-			String regx = "^(.+)@(.+)$";
+			String regx = "^(.+)@(\\S+)$";
 			if(regx == getMail())
 			{
 				this.mail = mail;

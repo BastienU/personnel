@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
 
 import personnel.*;
 
@@ -46,8 +47,38 @@ public class JDBC implements Passerelle
 			ResultSet ligues = instruction.executeQuery(requete);
 			while (ligues.next())
 				try {
-					gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
-				} catch (SauvegardeImpossible e) {
+					Ligue myLigue=new Ligue(gestionPersonnel,ligues.getInt(1), ligues.getString(2));
+					
+					gestionPersonnel.addLigue(myLigue.getId(), myLigue.getNom());
+					
+					PreparedStatement ps = connection.prepareStatement("SELECT * FROM employe WHERE idLigue = ?");
+					ps.setInt(1, ligues.getInt(1));
+					System.out.println("idLigue = " + ligues.getInt(1));
+					ResultSet employes = ps.executeQuery();
+					System.out.println("Pour la ligue = " + myLigue.getNom());
+					while(employes.next())
+					{
+						System.out.println("nom = " + employes.getString(2));
+						System.out.println("prenom = " + employes.getString(3));
+						System.out.println("mail = " + employes.getString(4));
+						System.out.println("pwd = " + employes.getString(5));
+						System.out.println("dteArrivee = " + employes.getDate(6));
+						System.out.println("dteDep = " + employes.getDate(7));
+						System.out.println("idEmploye = " + employes.getInt(1));
+						
+						LocalDate da = null;
+						LocalDate dd = null;
+						
+						if(employes.getDate(6) != null)
+							da = LocalDate.parse(employes.getString(6));
+						if(employes.getDate(7) != null)
+							dd = LocalDate.parse(employes.getString(7));
+						
+						
+						Employe employe = new Employe(gestionPersonnel, myLigue, employes.getString(2), employes.getString(3), employes.getString(4), employes.getString(5), da, dd, employes.getInt(1));
+						gestionPersonnel.addEmploye(employe);
+					}
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 		}
@@ -103,7 +134,7 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;		
-			instruction = connection.prepareStatement("UPDATE ligue SET nom = ? WHERE idLigue = ?", Statement.RETURN_GENERATED_KEYS);
+			instruction = connection.prepareStatement("UPDATE ligue SET nom = ? WHERE idLigue = ?");
 			instruction.setString(1, ligue.getNom());
 			//System.out.println(ligue.getNom());
 			instruction.setInt(2, ligue.getId());
@@ -131,8 +162,6 @@ public class JDBC implements Passerelle
 	          System.out.println("L'identifiant du compte root est : " + id);
 	        else
 	        {	
-	        	
-	        	
 	        	PreparedStatement instruction;
 	        	instruction = connection.prepareStatement("INSERT INTO employe (nom, password) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
 	        	instruction.setString(1, root.getNom());
@@ -157,7 +186,7 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;		
-			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password = ? WHERE idEmploye = ?", Statement.RETURN_GENERATED_KEYS);
+			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password = ? WHERE idEmploye = ?");
 			instruction.setString(1, employe.getNom());
 			System.out.println(employe.getNom());
 			instruction.setString(2, employe.getPrenom());

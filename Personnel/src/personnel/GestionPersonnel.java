@@ -107,13 +107,13 @@ public class GestionPersonnel implements Serializable
 	
 	public Employe addEmploye(Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws Exception
 	{
-		Employe employe = new Employe(this, 0, ligue, nom, prenom, mail, password, dateArrivee, dateDepart);
+		Employe employe = new Employe(this, ligue, nom, prenom, mail, password, dateArrivee, dateDepart);
 		employes.add(employe);
 		return employe;
 	}
 	public Employe addEmploye(Employe employe) throws Exception
 	{
-		Employe myEmploye = new Employe(this, 0, employe.getLigue(), employe.getNom(), employe.getPrenom(), employe.getMail(), employe.getPassword(), employe.getdateArrivee(), employe.getdateDepart());
+		Employe myEmploye = new Employe(this,  employe.getLigue(), employe.getNom(), employe.getPrenom(), employe.getMail(), employe.getPassword(), employe.getdateArrivee(), employe.getdateDepart(), employe.getId());
 		employes.add(myEmploye);
 		return myEmploye;
 	}
