@@ -272,19 +272,14 @@ public class Employe implements Serializable, Comparable<Employe>
 	}
 	
 	public void setdateArrivee(LocalDate dateArrivee) throws DateInvalide, SauvegardeImpossible
-	{ 		
-		if(dateArrivee != null) 
-		{				
-			if (dateDepart!=null && dateArrivee.isAfter(dateDepart))
+	{ 					
+			if (dateArrivee != null && dateDepart!=null && dateArrivee.isAfter(dateDepart))
 				throw new DateInvalide(new Exception("La date d'arrivée ne peut être postérieure à celle de départ"));
 			else
 			{
-				this.dateArrivee = dateArrivee;			
+				this.dateArrivee = dateArrivee;	
 				gestionPersonnel.updateEmploye(this);				
 			}
-		}
-		else
-			throw new DateInvalide(new Exception ("La date d'arrivée ne peut pas être nulle."));
 	}
 	
 	//Format des dates : yyyy-MM-dd
@@ -302,8 +297,6 @@ public class Employe implements Serializable, Comparable<Employe>
 	
 	public void setdateDepart(LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
 	{
-		if(dateDepart != null)
-		{
 			if(dateArrivee != null)
 			{
 				if (dateDepart.isBefore(dateArrivee)) 
@@ -316,9 +309,6 @@ public class Employe implements Serializable, Comparable<Employe>
 			}
 			else
 				throw new DateInvalide(new Exception("La date d'arrivée ne peut pas être nulle"));
-		}
-		else
-			this.dateDepart = null;
 //			throw new DateInvalide(new Exception("La date de départ ne peut pas être nulle"));
 	}
 
@@ -336,6 +326,7 @@ public class Employe implements Serializable, Comparable<Employe>
 			if (estAdmin(getLigue()))
 				getLigue().setAdministrateur(root);
 			getLigue().remove(this);
+			gestionPersonnel.deleteEmploye(this);
 		}
 		else
 			throw new ImpossibleDeSupprimerRoot();

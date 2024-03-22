@@ -90,6 +90,20 @@ public class GestionPersonnel implements Serializable
 	{
 		return Collections.unmodifiableSortedSet(employes);
 	}
+	
+//	public SortedSet<Employe> getEmployes(Ligue ligue)
+//	{
+//		SortedSet<Employe> lstEmployeFromLigue=new TreeSet<>();
+//		System.out.println("ligueID recherchée = "+ligue.getId());
+//		for(Employe emp :employes)
+//		{	
+//			System.out.println("Ligue de l'employé : "+emp.getLigue().getId());
+//			//System.out.println(emp.getNom());
+//			if(emp.getLigue().getId()==ligue.getId())
+//				lstEmployeFromLigue.add(emp);
+//		}
+//		return Collections.unmodifiableSortedSet(lstEmployeFromLigue);
+//	}
 
 	public Ligue addLigue(String nom) throws SauvegardeImpossible
 	{
@@ -105,18 +119,18 @@ public class GestionPersonnel implements Serializable
 		return ligue;
 	}
 	
-	public Employe addEmploye(Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws Exception
-	{
-		Employe employe = new Employe(this, ligue, nom, prenom, mail, password, dateArrivee, dateDepart);
-		employes.add(employe);
-		return employe;
-	}
-	public Employe addEmploye(Employe employe) throws Exception
-	{
-		Employe myEmploye = new Employe(this,  employe.getLigue(), employe.getNom(), employe.getPrenom(), employe.getMail(), employe.getPassword(), employe.getdateArrivee(), employe.getdateDepart(), employe.getId());
-		employes.add(myEmploye);
-		return myEmploye;
-	}
+//	public Employe addEmploye(Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws Exception
+//	{
+//		Employe employe = new Employe(this, ligue, nom, prenom, mail, password, dateArrivee, dateDepart);
+//		employes.add(employe);
+//		return employe;
+//	}
+//	public Employe addEmploye(Employe employe) throws Exception
+//	{
+//		Employe myEmploye = new Employe(this,  employe.getLigue(), employe.getNom(), employe.getPrenom(), employe.getMail(), employe.getPassword(), employe.getdateArrivee(), employe.getdateDepart(), employe.getId());
+//		employes.add(myEmploye);
+//		return myEmploye;
+//	}
 	
 	public Employe addRoot(String nom, String password)
 	{
@@ -155,6 +169,10 @@ public class GestionPersonnel implements Serializable
 		passerelle.updateEmploye(employe);
 	}
 	
+	void deleteEmploye(Employe employe) throws SauvegardeImpossible
+	{
+		passerelle.deleteEmploye(employe);
+	}
 	/**
 	 * Retourne le root (super-utilisateur).
 	 * @return le root.
@@ -162,7 +180,6 @@ public class GestionPersonnel implements Serializable
 	
 	public Employe getRoot()
 	{
-		
 		return root;
 	}
 }

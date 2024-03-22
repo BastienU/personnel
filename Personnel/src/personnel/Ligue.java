@@ -37,7 +37,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		this.id = gestionPersonnel.insert(this); 
 	}
 
-	public Ligue(GestionPersonnel gestionPersonnel, int id, String nom)
+	Ligue(GestionPersonnel gestionPersonnel, int id, String nom)
 	{
 		this.nom = nom;
 		//this.oldName=nom;
@@ -109,7 +109,14 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	
 	public SortedSet<Employe> getEmployes()
 	{
-		return Collections.unmodifiableSortedSet(employes);
+		if(employes != null && employes.size()>0)
+			return Collections.unmodifiableSortedSet(employes);
+		else
+		{
+			employes = gestionPersonnel.getEmployes();			
+				
+			return employes;
+		}
 	}
 
 	/**
@@ -137,6 +144,29 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		else
 			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
 	}
+	
+	public Employe addEmploye(int id, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws DateInvalide, SauvegardeImpossible
+	{
+		if(dateArrivee != null)
+		{
+			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, dateDepart, id);
+			employes.add(employe);
+			return employe;
+		}
+		else
+			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
+	}
+	
+//	public Employe addEmploye(Employe employe) throws DateInvalide, SauvegardeImpossible
+//	{
+//		if(!StringUtils.isNullOrEmpty(employe.getdateArrivee().toString()))
+//		{	
+//			employes.add(employe);
+//			return employe;
+//		}
+//		else
+//			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
+//	}
 	
 	void remove(Employe employe)
 	{

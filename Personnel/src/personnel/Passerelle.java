@@ -9,4 +9,5 @@ public interface Passerelle
 	public int insertRoot(Employe root) throws SauvegardeImpossible;
 	public void update(Ligue ligue) throws SauvegardeImpossible;
 	public void updateEmploye(Employe employe);
+	public void deleteEmploye(Employe employe);
 }

@@ -47,7 +47,7 @@ public class JDBC implements Passerelle
 			ResultSet ligues = instruction.executeQuery(requete);
 			while (ligues.next())
 				try {
-					Ligue myLigue=new Ligue(gestionPersonnel,ligues.getInt(1), ligues.getString(2));
+					Ligue myLigue=gestionPersonnel.addLigue(ligues.getInt(1), ligues.getString(2));
 					
 					gestionPersonnel.addLigue(myLigue.getId(), myLigue.getNom());
 					
@@ -58,25 +58,24 @@ public class JDBC implements Passerelle
 					System.out.println("Pour la ligue = " + myLigue.getNom());
 					while(employes.next())
 					{
-						System.out.println("nom = " + employes.getString(2));
-						System.out.println("prenom = " + employes.getString(3));
-						System.out.println("mail = " + employes.getString(4));
-						System.out.println("pwd = " + employes.getString(5));
-						System.out.println("dteArrivee = " + employes.getDate(6));
-						System.out.println("dteDep = " + employes.getDate(7));
-						System.out.println("idEmploye = " + employes.getInt(1));
+//						System.out.println("nom = " + employes.getString(2));
+//						System.out.println("prenom = " + employes.getString(3));
+//						System.out.println("mail = " + employes.getString(4));
+//						System.out.println("pwd = " + employes.getString(5));
+//						System.out.println("dteArrivee = " + employes.getDate(6));
+//						System.out.println("dteDep = " + employes.getDate(7));
+//						System.out.println("idEmploye = " + employes.getInt(1));
 						
 						LocalDate da = null;
 						LocalDate dd = null;
 						
-						if(employes.getDate(6) != null)
-							da = LocalDate.parse(employes.getString(6));
+//						if(employes.getDate(6) != null)
+						da = LocalDate.parse(employes.getString(6));
 						if(employes.getDate(7) != null)
 							dd = LocalDate.parse(employes.getString(7));
 						
-						
-						Employe employe = new Employe(gestionPersonnel, myLigue, employes.getString(2), employes.getString(3), employes.getString(4), employes.getString(5), da, dd, employes.getInt(1));
-						gestionPersonnel.addEmploye(employe);
+						//myLigue.addEmploye(employe);
+						myLigue.addEmploye(employes.getInt(1), employes.getString(2), employes.getString(3), employes.getString(4), employes.getString(5), da, dd);
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -196,6 +195,23 @@ public class JDBC implements Passerelle
 			instruction.setString(4, employe.getPassword());
 			System.out.println(employe.getPassword());
 			instruction.setInt(5, employe.getId());
+			System.out.println(employe.getId());
+			instruction.executeUpdate();
+			
+		} 
+		catch (SQLException exception) 
+		{
+			exception.printStackTrace();			
+		}
+	}
+	
+	public void deleteEmploye(Employe employe)
+	{
+		try 
+		{
+			PreparedStatement instruction;	
+			instruction = connection.prepareStatement("DELETE FROM employe WHERE idEmploye = ?");
+			instruction.setInt(1, employe.getId());
 			System.out.println(employe.getId());
 			instruction.executeUpdate();
 			

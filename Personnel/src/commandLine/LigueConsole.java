@@ -52,7 +52,16 @@ public class LigueConsole
 	}
 	private Option afficherEmployes(final Ligue ligue)
 	{
-		return new Option("Afficher les employes", "l", () -> {System.out.println(ligue.getEmployes());});
+		System.out.println(ligue.toString());
+		return new Option("Afficher les employes", "l", () -> 
+		{
+			for(Employe employe : ligue.getEmployes())
+			{
+				if(!employe.estRoot() && employe.getLigue().getNom()==ligue.getNom())
+					System.out.println(employe.toString());
+			}
+			
+		});
 	}
 
 	private Option ajouterLigue()
