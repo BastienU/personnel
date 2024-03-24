@@ -12,4 +12,5 @@ public interface Passerelle
 	public void deleteEmploye(Employe employe);
 	public void delete(Ligue ligue);
 	public Employe getMyRoot(GestionPersonnel gestionPersonnel) throws SauvegardeImpossible;
+	public void updateAdministrateur(Ligue ligue, Employe employe) throws SauvegardeImpossible;
 }

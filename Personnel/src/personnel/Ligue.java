@@ -99,7 +99,7 @@ public class Ligue implements Serializable, Comparable<Ligue>
 		if (administrateur != root && administrateur.getLigue() != this)
 			throw new DroitsInsuffisants();
 		this.administrateur = administrateur;
-		gestionPersonnel.update(this);
+		gestionPersonnel.updateAdmin(this, administrateur);
 	}
 
 	/**

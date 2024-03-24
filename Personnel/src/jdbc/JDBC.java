@@ -292,6 +292,7 @@ public class JDBC implements Passerelle
 	        	instruction.setDate(5, java.sql.Date.valueOf(employe.getdateArrivee()));
 	        	System.out.println(employe.getdateArrivee());
 	        }       
+	  
 	        System.out.println(employe.getLigue().getId());
 	        instruction.setInt(6, employe.getLigue().getId());
 	        
@@ -343,5 +344,47 @@ public class JDBC implements Passerelle
 		}
         
 		return myroot;
+	}
+	
+	public void updateAdministrateur(Ligue ligue, Employe employe) throws SauvegardeImpossible
+	{
+		PreparedStatement instruction;
+		 try 
+		 {
+			 //Step 1 : Suppression du titre estAdmin dans la table employe pour la ligue sélectionnée
+			 instruction = connection.prepareStatement("UPDATE employe SET estAdmin = null WHERE idLigue = ?");
+			 instruction.setInt(1, ligue.getId());
+			 instruction.executeUpdate();
+			 
+			//Step 2 : Suppression de l'idEmploye administrateur de la ligue
+			 instruction = connection.prepareStatement("UPDATE ligue SET idEmploye = null WHERE idLigue = ?");
+			 instruction.setInt(1, ligue.getId());
+			 instruction.executeUpdate();
+			 
+			 //Step 3 : Affectation de l'identifiant de l'employé administrateur dans la table ligue
+				instruction = connection.prepareStatement("UPDATE ligue SET idEmploye = ? WHERE idLigue = ?");
+				
+				instruction.setInt(1, employe.getId());
+				System.out.println("idEmploye = " + employe.getId());
+				instruction.setInt(2, ligue.getId());
+				System.out.println("idLigue = " + ligue.getId());
+				
+				instruction.executeUpdate();
+				
+				
+				//Step 4 : Affectation sur la colonne estAdmin de l'employé administrateur de la ligue 			
+				
+				instruction = connection.prepareStatement("UPDATE employe SET estAdmin = 1 WHERE idEmploye = ?");
+				
+				instruction.setInt(1, employe.getId());
+				System.out.println(employe.getId());
+				instruction.executeUpdate();
+				
+			} 
+			catch (SQLException exception) 
+			{
+				exception.printStackTrace();
+				throw new SauvegardeImpossible(exception);
+			}
 	}
 }
