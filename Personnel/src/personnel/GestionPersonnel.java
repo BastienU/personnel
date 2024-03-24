@@ -22,7 +22,7 @@ public class GestionPersonnel implements Serializable
 	private static GestionPersonnel gestionPersonnel = null;
 	private SortedSet<Ligue> ligues;
 	private SortedSet<Employe> employes;
-	private Employe root = new Employe(this, null, "root", "", "", "toor", null, null);
+	private Employe root;
 	public final static int SERIALIZATION = 1, JDBC = 2, 
 			TYPE_PASSERELLE = JDBC;
 	private static Passerelle passerelle = TYPE_PASSERELLE == JDBC ? new jdbc.JDBC() : new serialisation.Serialization();	
@@ -47,13 +47,20 @@ public class GestionPersonnel implements Serializable
 	}
 
 	public GestionPersonnel() throws SauvegardeImpossible
-	{
+	{		
 		if (gestionPersonnel != null)
-			throw new RuntimeException("Vous ne pouvez créer qu'une seuls instance de cet objet.");
+			throw new RuntimeException("Vous ne pouvez créer qu'une seule instance de cet objet.");
+		
+		gestionPersonnel = this;
 		ligues = new TreeSet<>();
 		employes = new TreeSet<>();
-		gestionPersonnel = this;
-		gestionPersonnel.addRoot(root.getNom(), root.getPassword());
+		//Vérification de l'existance d'un root en BDD
+		this.root= Employe.getMyRoot(this,"root", "toor");
+		//Dans le cas où il n'existerait pas, on l'ajoute en BDD avec ses valeurs par défaut.
+		if(this.root==null)
+			this.root=new Employe(this,null,"root","","","toor",null,null);
+		
+		employes.add(this.root);
 	}
 	
 	public void sauvegarder() throws SauvegardeImpossible
@@ -132,12 +139,36 @@ public class GestionPersonnel implements Serializable
 //		return myEmploye;
 //	}
 	
-	public Employe addRoot(String nom, String password)
+	
+	//Il faut créer une méthode addRoot() pour charger un root présent dans la bdd
+		//Le root déclaré en dur en variable d'instance doit être modifié. Il doit hériter des données de celui dans la base.
+		//Sa différence avec les autres employés est son appartenance à aucune ligue.
+	public Employe addRoot(String nom, String password) throws SauvegardeImpossible
 	{
-		Employe root = this.root;
-		employes.add(root);
-		return root;
+		
+		///TODO Vérifier l'existence d'un root en BDD
+		//SI Existe Récupérer les valeurs afin de modifier this.root
+		Employe myRoot = null;
+		try 
+		{
+			myRoot=passerelle.getMyRoot(this);
+			
+			this.root = myRoot;						
+		}
+		catch (Exception e)
+		{
+			System.err.println("Une erreur est survenue lors de la récupération des informations du root en BDD : ");
+			e.printStackTrace();
+		}
+		return myRoot;
 	}
+	
+	int insertRoot(Employe root) throws SauvegardeImpossible
+	{
+		return passerelle.insertRoot(root);
+	}
+	
+	
 
 	void remove(Ligue ligue)
 	{
@@ -158,12 +189,7 @@ public class GestionPersonnel implements Serializable
 	{
 		return passerelle.insertEmploye(employe);
 	}
-	
-	int insertRoot(Employe root) throws SauvegardeImpossible
-	{
-		return passerelle.insertRoot(root);
-	}
-	
+		
 	void updateEmploye(Employe employe) throws SauvegardeImpossible
 	{
 		passerelle.updateEmploye(employe);
@@ -172,6 +198,11 @@ public class GestionPersonnel implements Serializable
 	void deleteEmploye(Employe employe) throws SauvegardeImpossible
 	{
 		passerelle.deleteEmploye(employe);
+	}
+	
+	void delete(Ligue ligue) throws SauvegardeImpossible
+	{
+		passerelle.delete(ligue);
 	}
 	/**
 	 * Retourne le root (super-utilisateur).

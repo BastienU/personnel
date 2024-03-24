@@ -148,15 +148,38 @@ public class JDBC implements Passerelle
 		}
 	}
 	
+	public void delete(Ligue ligue)
+	{
+		try 
+		{
+			///TODO Faire une requête sql sur la table employé pour lire les eployés dans la ligue souhaitée
+			/// Supprimer tous les employés de cette ligue
+			///Si un employé était administrateur de la ligue, transférer le rôle d'admin au root puis le supprimer.
+			///Supprimer la ligue une fois vidée de ses employés.
+			PreparedStatement instruction;
+			instruction = connection.prepareStatement("DELETE FROM ligue WHERE idLigue = ?");
+			instruction.setInt(1, ligue.getId());
+			System.out.println(ligue.getId());
+			instruction.executeUpdate();										
+		} 
+		catch (SQLException exception) 
+		{
+			exception.printStackTrace();			
+		}
+	}
+	
 	public int insertRoot(Employe root) throws SauvegardeImpossible
 	{
+		int id = 0;
 		try 
 	    {
 			PreparedStatement checkIfExists = connection.prepareStatement("SELECT * FROM employe WHERE nom = ?");
 	        checkIfExists.setString(1, root.getNom());
 	        ResultSet result = checkIfExists.executeQuery();
 	        result.next();
-	        int id = result.getInt(1);
+	        if (result.getRow()>0)
+	        	id = result.getInt(1);
+	        
 	        if (id > 0)
 	          System.out.println("L'identifiant du compte root est : " + id);
 	        else
@@ -216,7 +239,7 @@ public class JDBC implements Passerelle
 			instruction.executeUpdate();
 			
 		} 
-		catch (SQLException exception) 
+		catch (SQLException exception)
 		{
 			exception.printStackTrace();			
 		}
@@ -246,7 +269,7 @@ public class JDBC implements Passerelle
 	        System.out.println(employe.getLigue().getId());
 	        instruction.setInt(6, employe.getLigue().getId());
 	        
-		   	instruction.executeUpdate();		   	
+		   	instruction.executeUpdate();
 		   	
 		   	ResultSet id = instruction.getGeneratedKeys();
 		   	
@@ -258,5 +281,41 @@ public class JDBC implements Passerelle
 			exception.printStackTrace();
 		    throw new SauvegardeImpossible(exception);
 		}
+	}
+	
+	public Employe getMyRoot(GestionPersonnel gestionPersonnel) throws SauvegardeImpossible
+	{
+		PreparedStatement instruction;
+        Employe myroot = null;
+        
+        try {
+			instruction = connection.prepareStatement("SELECT * FROM employe WHERE ISNULL(idLigue)", ResultSet.TYPE_SCROLL_INSENSITIVE, ResultSet.CONCUR_READ_ONLY);
+			ResultSet result=instruction.executeQuery();
+			
+//			result.last();
+//			if (result.getRow()>0)
+//			{
+				result.next();
+				if(result.first())
+				{
+					if(result.getString(2) != null)
+						System.out.println(result.getString(2));
+					if(result.getString(3) != null)
+						System.out.println(result.getString(3));
+					if(result.getString(4) != null)
+						System.out.println(result.getString(4));
+					if(result.getString(5) != null)
+						System.out.println(result.getString(5));
+				
+					myroot=new Employe(gestionPersonnel,null,result.getString(2),result.getString(3),result.getString(4), result.getString(5), null, null, result.getInt(1));
+				}
+//			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+        
+		return myroot;
 	}
 }

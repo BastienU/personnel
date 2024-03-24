@@ -60,11 +60,20 @@ public class Employe implements Serializable, Comparable<Employe>
 	{
 		this(gestionPersonnel, ligue, nom, prenom, mail, password, dateArrivee, dateDepart, -1);
 		if(ligue == null && dateArrivee == null)
+		{
+			//Employe root=gestionPersonnel.addRoot(this.nom, this.password);
+			
 			this.id = gestionPersonnel.insertRoot(this);
+		}
 		else
 			this.id = gestionPersonnel.insertEmploye(this);
 	}
 
+	public static Employe getMyRoot(GestionPersonnel gestionPersonnel,String nom, String password) throws SauvegardeImpossible
+	{
+		Employe root=gestionPersonnel.addRoot(nom, password);
+		return root;
+	}
 
 //	Employe(GestionPersonnel gestionPersonnel, int id, Ligue ligue,String nom, String prenom, String password, String mail,  LocalDate dateArrivee, LocalDate dateDepart) throws Exception
 //	{

@@ -76,6 +76,6 @@ public class PersonnelConsole
 	{
 		PersonnelConsole personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
 		if (personnelConsole.verifiePassword())
-			personnelConsole.start();		
+			personnelConsole.start();
 	}
 }

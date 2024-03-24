@@ -1,23 +1,19 @@
 {
-  "width": 270,
-  "height": 238,
+  "width": 376,
+  "height": 154,
   "cx": [
     [ "EMPLOYE", 73 ],
     [ "APPARTENIR", 215 ],
-    [ "GERER", 73 ],
-    [ "LIGUE", 215 ]
+    [ "LIGUE", 330 ]
   ],
   "cy": [
     [ "EMPLOYE", 77 ],
     [ "APPARTENIR", 77 ],
-    [ "GERER", 195 ],
-    [ "LIGUE", 195 ]
+    [ "LIGUE", 77 ]
   ],
   "shift": [
     [ "APPARTENIR,EMPLOYE,0", 0 ],
-    [ "APPARTENIR,LIGUE,0", 0 ],
-    [ "GERER,EMPLOYE,0", 0 ],
-    [ "GERER,LIGUE,0", 0 ]
+    [ "APPARTENIR,LIGUE,0", 0 ]
   ],
   "ratio": []
 }
