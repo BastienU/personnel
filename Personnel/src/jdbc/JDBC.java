@@ -208,7 +208,7 @@ public class JDBC implements Passerelle
 		try 
 		{
 			PreparedStatement instruction;	
-			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password = ? WHERE idEmploye = ?");
+			instruction = connection.prepareStatement("UPDATE employe SET nom = ?, prenom = ?, mail = ?, password = ?, dateArrivee = ?, dateDepart = ? WHERE idEmploye = ?");
 			instruction.setString(1, employe.getNom());
 			System.out.println(employe.getNom());
 			instruction.setString(2, employe.getPrenom());
@@ -217,8 +217,26 @@ public class JDBC implements Passerelle
 			System.out.println(employe.getMail());
 			instruction.setString(4, employe.getPassword());
 			System.out.println(employe.getPassword());
-			instruction.setInt(5, employe.getId());
+						
+			//Gestion des dates
+			if (employe.getdateArrivee() != null)
+	        {
+				System.out.println(employe.getdateArrivee());
+	        	instruction.setDate(5, java.sql.Date.valueOf(employe.getdateArrivee()));	        	
+	        }  
+			else
+				instruction.setDate(5, null);
+			if (employe.getdateDepart() != null)
+	        {
+				System.out.println(employe.getdateDepart());
+	        	instruction.setDate(6, java.sql.Date.valueOf(employe.getdateDepart()));	        	
+	        }  		
+			else
+				instruction.setDate(6, null);
+			//Fin gestion de date
+
 			System.out.println(employe.getId());
+			instruction.setInt(7, employe.getId());
 			instruction.executeUpdate();
 			
 		} 
