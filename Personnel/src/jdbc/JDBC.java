@@ -74,8 +74,16 @@ public class JDBC implements Passerelle
 						if(employes.getDate(7) != null)
 							dd = LocalDate.parse(employes.getString(7));
 						
-						//myLigue.addEmploye(employe);
-						myLigue.addEmploye(employes.getInt(1), employes.getString(2), employes.getString(3), employes.getString(4), employes.getString(5), da, dd);
+						boolean isAdmin= false;
+						if(employes.getBoolean(8))
+							isAdmin=true;
+						
+						Employe employe = myLigue.addEmploye(employes.getInt(1), employes.getString(2), employes.getString(3), employes.getString(4), employes.getString(5), da, dd);
+						if(isAdmin)
+						{
+							employe.setAdminLigue(true);
+							myLigue.setAdministrateur(employe);
+						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
