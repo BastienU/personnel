@@ -4,6 +4,8 @@ import personnel.*;
 import commandLineMenus.*;
 import static commandLineMenus.rendering.examples.util.InOut.*;
 
+import javax.swing.JFrame;
+
 public class PersonnelConsole
 {
 	private GestionPersonnel gestionPersonnel;
@@ -72,10 +74,13 @@ public class PersonnelConsole
 		return ok;
 	}
 	
-	public static void main(String[] args)throws SauvegardeImpossible
+	public static void main(String[] args)throws Exception
 	{
-		PersonnelConsole personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
-		if (personnelConsole.verifiePassword())
-			personnelConsole.start();
+//		PersonnelConsole personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
+//		if (personnelConsole.verifiePassword())
+//			personnelConsole.start();
+		
+		JFrame login = new Authentification(GestionPersonnel.getGestionPersonnel());
+		login.setVisible(true);
 	}
 }
