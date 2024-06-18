@@ -5,6 +5,8 @@ import commandLineMenus.*;
 import static commandLineMenus.rendering.examples.util.InOut.*;
 
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 public class PersonnelConsole
 {
@@ -79,8 +81,26 @@ public class PersonnelConsole
 //		PersonnelConsole personnelConsole = new PersonnelConsole(GestionPersonnel.getGestionPersonnel());
 //		if (personnelConsole.verifiePassword())
 //			personnelConsole.start();
+		try 
+	    {
+	      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	    } 
+	    catch (Exception e) 
+	    {
+	      System.out.println(e.getMessage());
+	    }
+	    
+	    SwingUtilities.invokeLater(() -> {
+		JFrame login;
+		try {
+			login = new Authentification(GestionPersonnel.getGestionPersonnel());
+			login.setVisible(true);
+		} catch (SauvegardeImpossible e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		JFrame login = new Authentification(GestionPersonnel.getGestionPersonnel());
-		login.setVisible(true);
+	    });
 	}
 }

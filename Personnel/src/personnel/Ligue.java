@@ -40,7 +40,6 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	Ligue(GestionPersonnel gestionPersonnel, int id, String nom)
 	{
 		this.nom = nom;
-		//this.oldName=nom;
 		employes = new TreeSet<>();
 		this.gestionPersonnel = gestionPersonnel;
 		administrateur = gestionPersonnel.getRoot();
@@ -110,10 +109,11 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	public SortedSet<Employe> getEmployes()
 	{
 		if(employes != null && employes.size()>0)
-			return Collections.unmodifiableSortedSet(employes);
+			return employes;
 		else
 		{
-			employes = gestionPersonnel.getEmployes();			
+		 	//employes = null;
+			employes = gestionPersonnel.getEmployes(this);			
 				
 			return employes;
 		}
@@ -131,15 +131,20 @@ public class Ligue implements Serializable, Comparable<Ligue>
 	 * @param password le password de l'employé.
 	 * @param dateArrivee la date de création de l'employé.
 	 * @return l'employé créé. 
-	 * @throws DateInvalide 
+	 * @throws Exception 
 	 */
-	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee) throws DateInvalide, SauvegardeImpossible
+	public Employe addEmploye(String nom, String prenom, String mail, String password, LocalDate dateArrivee) throws Exception
 	{
 		if(!StringUtils.isNullOrEmpty(dateArrivee.toString()))
 		{
 			Employe employe = new Employe(this.gestionPersonnel, this, nom, prenom, mail, password, dateArrivee, null);
-			employes.add(employe);
-			return employe;
+			
+			try {
+				employes.add(employe);
+				return employe;
+			} catch (Exception e) {
+				throw new Exception(e.getMessage());
+			}
 		}
 		else
 			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
@@ -157,16 +162,13 @@ public class Ligue implements Serializable, Comparable<Ligue>
 			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
 	}
 	
-//	public Employe addEmploye(Employe employe) throws DateInvalide, SauvegardeImpossible
-//	{
-//		if(!StringUtils.isNullOrEmpty(employe.getdateArrivee().toString()))
-//		{	
-//			employes.add(employe);
-//			return employe;
-//		}
-//		else
-//			throw new DateInvalide(new Exception("La date d'arrivée ne peut être nulle. Voici le format attendu : yyyy-MM-dd."));		
-//	}
+	public Employe addEmploye(Employe employe) throws DateInvalide, SauvegardeImpossible
+	{			
+		//getEmployes();
+		
+		employes.add(employe);
+		return employe;				
+	}
 	
 	void remove(Employe employe)
 	{

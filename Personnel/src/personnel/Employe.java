@@ -7,9 +7,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
-import org.junit.jupiter.params.shadow.com.univocity.parsers.annotations.Convert;
-import org.junit.jupiter.params.shadow.com.univocity.parsers.conversions.RegexConversion;
+import org.hamcrest.Matcher;
 
 import com.mysql.cj.util.StringUtils;
 
@@ -34,6 +34,11 @@ public class Employe implements Serializable, Comparable<Employe>
 	private boolean isAdmin;
 	private int id;
 	
+	public void setId(int id) {
+		this.id = id;
+	}
+
+
 	public Employe(GestionPersonnel gestionPersonnel, Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart, int id)
 	{
 		this.gestionPersonnel = gestionPersonnel;
@@ -61,10 +66,10 @@ public class Employe implements Serializable, Comparable<Employe>
 		this(gestionPersonnel, ligue, nom, prenom, mail, password, dateArrivee, dateDepart, -1);
 		if(ligue == null && dateArrivee == null)
 		{
-			//Employe root=gestionPersonnel.addRoot(this.nom, this.password);
-			
+			//Employe root			
 			this.id = gestionPersonnel.insertRoot(this);
 		}
+		///Création de l'employé en BDD
 		else
 			this.id = gestionPersonnel.insertEmploye(this);
 	}
@@ -196,8 +201,10 @@ public class Employe implements Serializable, Comparable<Employe>
 	{
 		if(mail != null)
 		{
-			String regx = "^(.+)@(\\S+)$";
-			if(regx == getMail())
+			String regx = "^(.+)@(.+)$";
+			Pattern pattern = Pattern.compile(regx);
+			java.util.regex.Matcher matcher = pattern.matcher(mail);
+			if(matcher.matches())
 			{
 				this.mail = mail;
 				gestionPersonnel.updateEmploye(this);

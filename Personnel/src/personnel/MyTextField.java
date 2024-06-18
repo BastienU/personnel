@@ -2,6 +2,7 @@ package personnel;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.time.LocalDate;
 
 public class MyTextField extends TextField{
     int limit;
@@ -19,4 +20,9 @@ public class MyTextField extends TextField{
             }
        });
     }
+
+	public void setText(LocalDate getdateArrivee) {
+		// TODO Auto-generated method stub
+		
+	}
 }

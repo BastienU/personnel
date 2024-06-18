@@ -26,34 +26,38 @@ public class Authentification extends JFrame implements ActionListener {
         
         initComponents();
  
-        setSize(500, 300);
+        setSize(400, 250);
         this.setTitle("Login");
         this.setLocationRelativeTo(null);
+        this.getContentPane().setBackground(new Color(44, 92, 158));
         
         gestPers = GP;
     }
  
     
     private void initComponents() {
-    	int x = (500 - 240)/2;
+    	int x = (400 - 200)/2;
         titre = new JLabel("Bienvenue", SwingConstants.CENTER);
         titre.setLocation(x, 20);
-        titre.setSize(240, 30);
+        titre.setSize(200, 30);
+        titre.setForeground(Color.WHITE);
         
-        x = (500 - 170)/2; 
+        x = (400 - 180)/2; 
         lblUserName = new JLabel("Login : ", SwingConstants.LEFT);
         lblUserName.setLocation(x, 70);
         lblUserName.setSize(80, 20);
+        lblUserName.setForeground(Color.WHITE);
         
         x = x + 10 + 80;
         txtUserName = new MyTextField(5, 10);
         txtUserName.setLocation(x, 70);
         txtUserName.setSize(90, 20);
         
-        x = (500 - 170)/2; 
+        x = (400 - 180)/2; 
         lblPassword = new JLabel("Password : ", SwingConstants.LEFT);
         lblPassword.setLocation(x, 110);
         lblPassword.setSize(80, 20);
+        lblPassword.setForeground(Color.WHITE);
         
         x = x + 10 + 80;
         txtPassword = new MyTextField(5, 10);
@@ -61,14 +65,15 @@ public class Authentification extends JFrame implements ActionListener {
         txtPassword.setSize(90, 20);
         
         
-        x = (500 - 120)/2;
+        x = (400 - 120)/2;
         button = new JButton("Connexion");
-        button.setLocation(x, 180);
+        button.setLocation(x, 170);
         button.setSize(120, 20);
         
         info = new JLabel();
         info.setLocation(30, 140);
         info.setSize(250, 20);
+        info.setForeground(Color.WHITE);
         
         setLayout(null);
  
@@ -81,6 +86,8 @@ public class Authentification extends JFrame implements ActionListener {
         add(info);
         button.addActionListener(this);
         
+        txtUserName.setText("Toor");
+        txtPassword.setText("Mitoor");
     }
     
     public static boolean isNullOrEmpty(String s) {

@@ -39,9 +39,7 @@ public class GestionPersonnel implements Serializable
 		{
 			gestionPersonnel = passerelle.getGestionPersonnel();
 			if (gestionPersonnel == null)
-				gestionPersonnel = new GestionPersonnel();
-			
-			
+				gestionPersonnel = new GestionPersonnel();		
 		}
 		return gestionPersonnel;
 	}
@@ -95,22 +93,25 @@ public class GestionPersonnel implements Serializable
 	
 	public SortedSet<Employe> getEmployes()
 	{
-		return Collections.unmodifiableSortedSet(employes);
+		return employes;
 	}
 	
-//	public SortedSet<Employe> getEmployes(Ligue ligue)
-//	{
-//		SortedSet<Employe> lstEmployeFromLigue=new TreeSet<>();
-//		System.out.println("ligueID recherchée = "+ligue.getId());
-//		for(Employe emp :employes)
-//		{	
-//			System.out.println("Ligue de l'employé : "+emp.getLigue().getId());
-//			//System.out.println(emp.getNom());
-//			if(emp.getLigue().getId()==ligue.getId())
-//				lstEmployeFromLigue.add(emp);
-//		}
-//		return Collections.unmodifiableSortedSet(lstEmployeFromLigue);
-//	}
+	public SortedSet<Employe> getEmployes(Ligue ligue)
+	{
+		SortedSet<Employe> lstEmployeFromLigue=new TreeSet<>();
+		System.out.println("ligueID recherchée = "+ligue.getId());
+		for(Employe emp :employes)
+		{	
+			if(emp.getLigue() != null)
+			{
+			System.out.println("Ligue de l'employé : "+emp.getLigue().getId());
+			//System.out.println(emp.getNom());
+			 if(emp.getLigue().getId() == ligue.getId())
+				lstEmployeFromLigue.add(emp);
+			}
+		}
+		return lstEmployeFromLigue;
+	}
 
 	public Ligue addLigue(String nom) throws SauvegardeImpossible
 	{
@@ -124,7 +125,7 @@ public class GestionPersonnel implements Serializable
 		Ligue ligue = new Ligue(this, id, nom);
 		ligues.add(ligue);
 		return ligue;
-	}
+	}	
 	
 //	public Employe addEmploye(Ligue ligue, String nom, String prenom, String mail, String password, LocalDate dateArrivee, LocalDate dateDepart) throws Exception
 //	{
@@ -170,8 +171,9 @@ public class GestionPersonnel implements Serializable
 	
 	
 
-	void remove(Ligue ligue)
+	void remove(Ligue ligue) throws SauvegardeImpossible
 	{
+		delete(ligue);
 		ligues.remove(ligue);
 	}
 	
@@ -192,7 +194,10 @@ public class GestionPersonnel implements Serializable
 	
 	int insertEmploye(Employe employe) throws SauvegardeImpossible
 	{
-		return passerelle.insertEmploye(employe);
+		int idEmploye = passerelle.insertEmploye(employe);
+		employe.setId(idEmploye);
+		//employes.add(employe);
+		return idEmploye;
 	}
 		
 	void updateEmploye(Employe employe) throws SauvegardeImpossible
